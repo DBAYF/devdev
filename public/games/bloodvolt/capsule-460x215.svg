@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 215" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="460" y2="215" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#080c12"/>
+      <stop offset="1" stop-color="#1a0530"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.75" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#00f0ff" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#00f0ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="460" height="215" fill="url(#bg)"/>
+  <rect width="460" height="215" fill="url(#glow)"/>
+  <g opacity="0.7">
+    <polygon points="320,170 350,130 380,170 365,200 335,200" fill="none" stroke="#00f0ff" stroke-width="2"/>
+    <polygon points="380,160 405,125 430,160 418,195 392,195" fill="none" stroke="#ff006e" stroke-width="2"/>
+  </g>
+  <text x="24" y="104" font-family="-apple-system,BlinkMacSystemFont,'Inter',sans-serif"
+    font-size="44" font-weight="900" fill="#fff" letter-spacing="-1">BLOODVOLT</text>
+  <text x="24" y="124" font-family="ui-monospace,'JetBrains Mono',monospace"
+    font-size="10" font-weight="700" fill="#00f0ff" letter-spacing="2.5">GAME ONE · ULTIMATE</text>
+</svg>

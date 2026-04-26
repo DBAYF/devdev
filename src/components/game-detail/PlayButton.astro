@@ -1,0 +1,22 @@
+---
+import type { GameManifest } from '@content/config';
+import Button from '../primitives/Button.astro';
+import Icon from '../primitives/Icon.astro';
+
+interface Props { manifest: GameManifest; }
+const { manifest } = Astro.props as Props;
+---
+
+<Button
+  href={manifest.playUrl}
+  target="_blank"
+  rel="noopener noreferrer"
+  variant="primary"
+  size="lg"
+  fullWidth={true}
+  ariaLabel={`Play ${manifest.title} (opens in new tab)`}
+>
+  <Icon name="play" size={16} />
+  PLAY {manifest.title}
+  <Icon name="external" size={14} />
+</Button>

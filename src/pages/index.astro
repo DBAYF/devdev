@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@components/layout/BaseLayout.astro';
+import ContentSection from '@components/layout/ContentSection.astro';
+import CapsuleHero from '@components/capsule/CapsuleHero.astro';
+import CapsuleCatalog from '@components/capsule/CapsuleCatalog.astro';
+import { homeSeo } from '@lib/seo';
+import { GAMES } from '@data/games-registry';
+
+const games = await getCollection('games');
+const bySlug = Object.fromEntries(games.map((g) => [g.id, g.data]));
+
+const featuredSlug = GAMES.find((g) => g.featured)?.slug;
+const featured = featuredSlug ? bySlug[featuredSlug] : undefined;
+const all = games.map((g) => g.data);
+
+const seo = homeSeo(Astro.site?.toString() ?? 'https://devdev-games.web.app');
+---
+
+<BaseLayout seo={seo}>
+  {featured && (
+    <ContentSection eyebrow="FEATURED" spacing="md">
+      <CapsuleHero manifest={featured} priority={true} />
+    </ContentSection>
+  )}
+
+  <ContentSection title="ALL GAMES" eyebrow={`${all.length} title${all.length === 1 ? '' : 's'}`} spacing="md">
+    <div class="grid">
+      {all.map((m) => <CapsuleCatalog manifest={m} />)}
+    </div>
+  </ContentSection>
+</BaseLayout>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-4);
+  }
+</style>

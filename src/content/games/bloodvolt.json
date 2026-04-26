@@ -1,0 +1,54 @@
+{
+  "slug": "bloodvolt",
+  "title": "BLOODVOLT",
+  "subtitle": "GAME ONE ULTIMATE",
+  "tagline": "Cyberpunk arena combat. 384 endgame paths. One life at a time.",
+  "description": "Persistent .io-style PvP arena combat. Six chassis, four tiers of class progression with 384 endgame paths, 16 achievements, 14 weekly mutators, 5 biome bosses, kill-cam replay, and friend-build sharing via portable codes. No accounts. No backend. Just the fight.",
+  "genre": [
+    "Action",
+    "Arena",
+    "Roguelite"
+  ],
+  "tags": [
+    "PvP",
+    "io",
+    "Class-tree",
+    "Mutators",
+    "Mature",
+    "Free"
+  ],
+  "rating": "PEGI-18",
+  "playUrl": "https://bldvolt.web.app",
+  "version": "1.0-ultimate",
+  "releaseDate": "2026-04-26",
+  "accentColor": "#00f0ff",
+  "darkColor": "#080c12",
+  "capsules": {
+    "hero": "/games/bloodvolt/capsule-616x353.svg",
+    "catalog": "/games/bloodvolt/capsule-460x215.svg",
+    "mini": "/games/bloodvolt/capsule-184x69.svg"
+  },
+  "screenshots": [
+    "/games/bloodvolt/screenshot-01.svg",
+    "/games/bloodvolt/screenshot-02.svg",
+    "/games/bloodvolt/screenshot-03.svg",
+    "/games/bloodvolt/screenshot-04.svg",
+    "/games/bloodvolt/screenshot-05.svg"
+  ],
+  "stats": {
+    "achievements": 16,
+    "endgamePaths": 384,
+    "decorators": 607,
+    "biomes": 6,
+    "bosses": 5,
+    "perks": 18,
+    "weeklyMutators": 14
+  },
+  "features": {
+    "multiplayer": true,
+    "controller": false,
+    "mobile": true,
+    "ageGate": true,
+    "freeToPlay": true
+  }
+}

@@ -1,0 +1,96 @@
+---
+// Button — generic primitive. Variants: primary | ghost | danger.
+// Renders <a> if `href` provided, else <button>.
+
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'ghost' | 'danger';
+  size?: 'sm' | 'md' | 'lg';
+  target?: '_self' | '_blank';
+  rel?: string;
+  type?: 'button' | 'submit';
+  disabled?: boolean;
+  fullWidth?: boolean;
+  ariaLabel?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  target,
+  rel,
+  type = 'button',
+  disabled = false,
+  fullWidth = false,
+  ariaLabel,
+} = Astro.props as Props;
+
+const cls = ['btn', `btn--${variant}`, `btn--${size}`, fullWidth && 'btn--full']
+  .filter(Boolean)
+  .join(' ');
+---
+
+{
+  href ? (
+    <a href={href} class={cls} target={target} rel={rel} aria-label={ariaLabel}>
+      <slot />
+    </a>
+  ) : (
+    <button type={type} class={cls} disabled={disabled} aria-label={ariaLabel}>
+      <slot />
+    </button>
+  )
+}
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-weight: 800;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    border-radius: var(--radius-2);
+    border: 1px solid transparent;
+    transition: background-color var(--dur-1) var(--ease-out),
+      border-color var(--dur-1) var(--ease-out),
+      color var(--dur-1) var(--ease-out),
+      transform var(--dur-1) var(--ease-out);
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .btn[disabled] { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+
+  .btn--sm { font-size: var(--fs-1); padding: 6px 10px; }
+  .btn--md { font-size: var(--fs-2); padding: 9px 16px; }
+  .btn--lg { font-size: var(--fs-3); padding: 14px 24px; }
+
+  .btn--full { width: 100%; }
+
+  .btn--primary {
+    background: var(--accent);
+    color: var(--bg-0);
+  }
+  .btn--primary:hover { background: color-mix(in srgb, var(--accent) 88%, white); }
+
+  .btn--ghost {
+    background: transparent;
+    border-color: var(--border-1);
+    color: var(--text-0);
+  }
+  .btn--ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .btn--danger {
+    background: var(--danger);
+    color: var(--text-0);
+  }
+  .btn--danger:hover { background: color-mix(in srgb, var(--danger) 88%, white); }
+</style>

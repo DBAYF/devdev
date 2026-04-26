@@ -1,0 +1,37 @@
+---
+interface Props {
+  title?: string;
+  eyebrow?: string;
+  spacing?: 'sm' | 'md' | 'lg';
+}
+const { title, eyebrow, spacing = 'md' } = Astro.props as Props;
+---
+
+<section class={`section section--${spacing}`}>
+  {(title || eyebrow) && (
+    <header class="section__head">
+      {eyebrow && <div class="section__eyebrow">{eyebrow}</div>}
+      {title && <h2 class="section__title">{title}</h2>}
+    </header>
+  )}
+  <slot />
+</section>
+
+<style>
+  .section--sm { margin-block: var(--space-5); }
+  .section--md { margin-block: var(--space-7); }
+  .section--lg { margin-block: var(--space-8); }
+  .section__head { margin-bottom: var(--space-4); }
+  .section__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .section__title {
+    font-size: var(--fs-5);
+    color: var(--text-0);
+  }
+</style>

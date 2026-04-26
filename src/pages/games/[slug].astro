@@ -1,0 +1,85 @@
+---
+// Dynamic per-game detail page. ONE template renders every game.
+// Game-specific look-and-feel is driven entirely by the manifest's accentColor /
+// darkColor / capsules / screenshots — no per-game code branches allowed.
+
+import { getCollection } from 'astro:content';
+import BaseLayout from '@components/layout/BaseLayout.astro';
+import GameHero from '@components/game-detail/GameHero.astro';
+import GameAbout from '@components/game-detail/GameAbout.astro';
+import GameStats from '@components/game-detail/GameStats.astro';
+import GameFeatures from '@components/game-detail/GameFeatures.astro';
+import GameWeeklyEvent from '@components/game-detail/GameWeeklyEvent.astro';
+import PlayButton from '@components/game-detail/PlayButton.astro';
+import ScreenshotCarousel from '@components/carousel/ScreenshotCarousel.astro';
+import { gameSeo } from '@lib/seo';
+import { gameThemeStyle } from '@lib/theme';
+
+export async function getStaticPaths() {
+  const games = await getCollection('games');
+  return games.map((g) => ({ params: { slug: g.id }, props: { manifest: g.data } }));
+}
+
+const { manifest } = Astro.props;
+const seo = gameSeo(manifest, Astro.site?.toString() ?? 'https://devdev-games.web.app');
+const theme = gameThemeStyle(manifest);
+---
+
+<BaseLayout seo={seo} themeStyle={theme} bodyDataGame={manifest.slug}>
+  <GameHero manifest={manifest} />
+
+  <div class="layout">
+    <div class="layout__main">
+      <ScreenshotCarousel images={manifest.screenshots} alt={manifest.title} />
+      <GameAbout manifest={manifest} />
+      <GameStats manifest={manifest} />
+    </div>
+    <aside class="layout__side">
+      <PlayButton manifest={manifest} />
+      <GameFeatures manifest={manifest} />
+      <GameWeeklyEvent manifest={manifest} />
+      <div class="meta">
+        <div class="meta__row"><span>VERSION</span><b>{manifest.version}</b></div>
+        <div class="meta__row"><span>RELEASED</span><b>{manifest.releaseDate}</b></div>
+        <div class="meta__row"><span>RATING</span><b>{manifest.rating}</b></div>
+      </div>
+    </aside>
+  </div>
+</BaseLayout>
+
+<style>
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: var(--space-5);
+    align-items: flex-start;
+  }
+  .layout__main { display: flex; flex-direction: column; gap: var(--space-5); min-width: 0; }
+  .layout__side { display: flex; flex-direction: column; gap: var(--space-4); position: sticky; top: calc(var(--nav-h) + var(--space-3)); }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .layout__side { position: static; }
+  }
+
+  .meta {
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--border-0);
+    background: var(--bg-1);
+    border-radius: var(--radius-3);
+  }
+  .meta__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: var(--fs-1);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    padding: 6px 0;
+    color: var(--text-2);
+    border-bottom: 1px dashed var(--border-0);
+  }
+  .meta__row:last-child { border-bottom: 0; }
+  .meta__row b { color: var(--text-0); font-weight: 800; }
+</style>

@@ -1,0 +1,49 @@
+---
+import type { GameManifest } from '@content/config';
+import { formatCountdown } from '@lib/format';
+
+interface Props { manifest: GameManifest; }
+const { manifest } = Astro.props as Props;
+const ev = manifest.weeklyEvent;
+const countdown = ev ? formatCountdown(ev.until) : null;
+---
+
+{ev && (
+  <div class="we">
+    <div class="we__eyebrow">THIS WEEK</div>
+    <div class="we__name">{ev.name}</div>
+    <div class="we__until">ENDS IN {countdown}</div>
+  </div>
+)}
+
+<style>
+  .we {
+    padding: var(--space-4);
+    border: 1px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: var(--radius-3);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .we__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .we__name {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: var(--fs-4);
+    color: var(--text-0);
+    letter-spacing: var(--tracking-tight);
+  }
+  .we__until {
+    font-family: var(--font-mono);
+    font-size: var(--fs-1);
+    letter-spacing: var(--tracking-wide);
+    color: var(--text-2);
+  }
+</style>

@@ -1,0 +1,32 @@
+---
+import BaseLayout from '@components/layout/BaseLayout.astro';
+import ContentSection from '@components/layout/ContentSection.astro';
+
+const seo = {
+  title: 'Profile — devdev',
+  description: 'Your profile, achievements, and library on devdev.',
+  canonical: `${Astro.site?.toString() ?? ''}/profile`,
+};
+---
+
+<BaseLayout seo={seo}>
+  <ContentSection title="PROFILE" eyebrow="COMING SOON">
+    <p class="stub">
+      Cross-game profile, achievements, and playtime arrive in the next phase. Until then,
+      each game keeps its own progress on its own origin.
+    </p>
+  </ContentSection>
+</BaseLayout>
+
+<style>
+  .stub {
+    color: var(--text-2);
+    font-family: var(--font-mono);
+    font-size: var(--fs-2);
+    line-height: var(--lh-snug);
+    max-width: 60ch;
+    padding: var(--space-5);
+    border: 1px dashed var(--border-1);
+    border-radius: var(--radius-3);
+  }
+</style>

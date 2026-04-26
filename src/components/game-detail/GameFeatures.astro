@@ -1,0 +1,40 @@
+---
+import type { GameManifest } from '@content/config';
+import Tag from '../primitives/Tag.astro';
+
+interface Props { manifest: GameManifest; }
+const { manifest } = Astro.props as Props;
+const f = manifest.features;
+const items: { label: string; on: boolean; tone?: 'accent' | 'warn' }[] = [
+  { label: 'Free to Play',    on: f.freeToPlay,   tone: 'accent' },
+  { label: 'Multiplayer',     on: f.multiplayer },
+  { label: 'Mobile Ready',    on: f.mobile },
+  { label: 'Controller',      on: f.controller },
+  { label: 'Mature 18+',      on: f.ageGate, tone: 'warn' },
+];
+---
+
+<div class="features">
+  <h3 class="features__head">FEATURES</h3>
+  <ul class="features__list">
+    {items.filter((i) => i.on).map((i) => (
+      <li><Tag variant={i.tone ?? 'neutral'}>{i.label}</Tag></li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .features__head {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: var(--space-2);
+  }
+  .features__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+</style>

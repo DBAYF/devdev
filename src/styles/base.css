@@ -1,0 +1,44 @@
+/* Base typography + body shell. */
+
+html {
+  background: var(--bg-0);
+  color: var(--text-0);
+  font-family: var(--font-body);
+  font-size: var(--fs-3);
+  line-height: var(--lh-normal);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--bg-0);
+  color: var(--text-1);
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+  width: 100%;
+  max-width: var(--content-w);
+  margin-inline: auto;
+  padding: var(--space-5) var(--space-4);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  color: var(--text-0);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--lh-tight);
+}
+
+h1 { font-size: var(--fs-7); }
+h2 { font-size: var(--fs-6); }
+h3 { font-size: var(--fs-5); }
+h4 { font-size: var(--fs-4); }
+
+a:hover { color: var(--accent); }
+
+::selection { background: var(--accent); color: var(--bg-0); }

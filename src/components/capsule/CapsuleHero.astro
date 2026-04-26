@@ -1,0 +1,97 @@
+---
+// CapsuleHero — featured 616×353 hero capsule for home carousel & top-of-page slot.
+// Tints with the game's accent. Hover scale + glow.
+
+import type { GameManifest } from '@content/config';
+import { route } from '@lib/routes';
+import Tag from '../primitives/Tag.astro';
+
+interface Props {
+  manifest: GameManifest;
+  priority?: boolean; // first hero on a page; loads eagerly
+}
+
+const { manifest, priority = false } = Astro.props as Props;
+const href = route.game(manifest.slug);
+---
+
+<a class="cap" href={href} style={`--game-accent:${manifest.accentColor};--game-dark:${manifest.darkColor};`}>
+  <img
+    class="cap__art"
+    src={manifest.capsules.hero}
+    alt={`${manifest.title} key art`}
+    loading={priority ? 'eager' : 'lazy'}
+    decoding="async"
+    width="616"
+    height="353"
+  />
+  <div class="cap__overlay">
+    <div class="cap__top">
+      {manifest.subtitle && <Tag variant="accent" size="sm">{manifest.subtitle}</Tag>}
+    </div>
+    <div class="cap__btm">
+      <h2 class="cap__title">{manifest.title}</h2>
+      <p class="cap__tagline">{manifest.tagline}</p>
+    </div>
+  </div>
+</a>
+
+<style>
+  .cap {
+    --bg: var(--game-dark, var(--bg-1));
+    --tint: var(--game-accent, var(--accent));
+    position: relative;
+    display: block;
+    aspect-ratio: 616 / 353;
+    width: 100%;
+    border-radius: var(--radius-3);
+    overflow: hidden;
+    background: var(--bg);
+    border: 1px solid var(--border-1);
+    transition: transform var(--dur-2) var(--ease-out),
+      border-color var(--dur-2) var(--ease-out),
+      box-shadow var(--dur-2) var(--ease-out);
+  }
+  .cap:hover {
+    transform: translateY(-2px);
+    border-color: var(--tint);
+    box-shadow: 0 12px 40px color-mix(in srgb, var(--tint) 28%, transparent);
+  }
+  .cap__art {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--dur-3) var(--ease-out);
+  }
+  .cap:hover .cap__art { transform: scale(1.04); }
+  .cap__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--space-4);
+    background:
+      linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 50%),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, transparent 30%);
+  }
+  .cap__top { display: flex; gap: var(--space-2); }
+  .cap__btm { display: flex; flex-direction: column; gap: var(--space-2); }
+  .cap__title {
+    font-size: var(--fs-7);
+    color: #fff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  }
+  .cap__tagline {
+    font-family: var(--font-mono);
+    font-size: var(--fs-2);
+    color: var(--text-1);
+    letter-spacing: var(--tracking-wide);
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+    max-width: 80%;
+  }
+  @media (max-width: 600px) {
+    .cap__title { font-size: var(--fs-5); }
+    .cap__tagline { font-size: var(--fs-1); max-width: 100%; }
+  }
+</style>

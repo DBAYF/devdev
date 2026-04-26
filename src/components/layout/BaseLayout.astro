@@ -1,0 +1,53 @@
+---
+import '@styles/globals.css';
+import TopNav from './TopNav.astro';
+import Footer from './Footer.astro';
+import type { SeoProps } from '@lib/seo';
+
+interface Props {
+  seo: SeoProps;
+  themeStyle?: string; // per-game CSS vars override (--accent, --bg-game)
+  bodyDataGame?: string; // <body data-game="bloodvolt"> for theme scoping
+}
+
+const { seo, themeStyle, bodyDataGame } = Astro.props as Props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="description" content={seo.description} />
+    <title>{seo.title}</title>
+    {seo.canonical && <link rel="canonical" href={seo.canonical} />}
+
+    {/* Open Graph */}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={seo.title} />
+    <meta property="og:description" content={seo.description} />
+    {seo.image && <meta property="og:image" content={seo.image} />}
+    {seo.canonical && <meta property="og:url" content={seo.canonical} />}
+
+    {/* Twitter */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={seo.title} />
+    <meta name="twitter:description" content={seo.description} />
+    {seo.image && <meta name="twitter:image" content={seo.image} />}
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    {/* Self-hosted fonts (added in Phase 1) */}
+    {/* <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin /> */}
+
+    {themeStyle && <style is:inline set:html={`:root { ${themeStyle} }`} />}
+  </head>
+  <body data-game={bodyDataGame}>
+    <TopNav />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

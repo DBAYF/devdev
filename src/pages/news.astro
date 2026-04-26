@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@components/layout/BaseLayout.astro';
+import ContentSection from '@components/layout/ContentSection.astro';
+import Tag from '@components/primitives/Tag.astro';
+import { formatDate } from '@lib/format';
+
+const all = await getCollection('news');
+const sorted = all.sort((a, b) => (a.data.date < b.data.date ? 1 : -1));
+
+const seo = {
+  title: 'News — devdev',
+  description: 'Patch notes and updates across all devdev games.',
+  canonical: `${Astro.site?.toString() ?? ''}/news`,
+};
+---
+
+<BaseLayout seo={seo}>
+  <ContentSection title="NEWS" eyebrow={`${sorted.length} update${sorted.length === 1 ? '' : 's'}`}>
+    {sorted.length === 0 ? (
+      <p class="empty">No updates yet.</p>
+    ) : (
+      <ul class="news">
+        {sorted.map((n) => (
+          <li class="news__item">
+            <div class="news__head">
+              {n.data.pinned && <Tag variant="warn" size="sm">PINNED</Tag>}
+              <Tag variant="accent" size="sm">{n.data.game}</Tag>
+              <time class="news__date">{formatDate(n.data.date)}</time>
+            </div>
+            <h3 class="news__title">{n.data.title}</h3>
+            <p class="news__summary">{n.data.summary}</p>
+          </li>
+        ))}
+      </ul>
+    )}
+  </ContentSection>
+</BaseLayout>
+
+<style>
+  .empty { color: var(--text-2); font-family: var(--font-mono); }
+  .news { display: flex; flex-direction: column; gap: var(--space-4); }
+  .news__item { padding: var(--space-4); border: 1px solid var(--border-0); background: var(--bg-1); border-radius: var(--radius-3); }
+  .news__head { display: flex; gap: var(--space-2); align-items: center; margin-bottom: var(--space-2); }
+  .news__date { font-family: var(--font-mono); font-size: var(--fs-1); color: var(--text-2); margin-left: auto; }
+  .news__title { margin-bottom: 4px; font-size: var(--fs-4); }
+  .news__summary { color: var(--text-1); }
+</style>

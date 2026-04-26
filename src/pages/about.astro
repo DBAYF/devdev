@@ -1,0 +1,46 @@
+---
+import BaseLayout from '@components/layout/BaseLayout.astro';
+import ContentSection from '@components/layout/ContentSection.astro';
+
+const seo = {
+  title: 'About — devdev',
+  description: 'About the devdev games portal.',
+  canonical: `${Astro.site?.toString() ?? ''}/about`,
+};
+---
+
+<BaseLayout seo={seo}>
+  <ContentSection title="ABOUT" eyebrow="DEVDEV">
+    <div class="prose">
+      <p>
+        <b>devdev</b> is an indie games portal. One game at launch — <b>BLOODVOLT v1.0
+        ULTIMATE</b> — with more in the pipeline. Built static-first on Firebase
+        Hosting; no backend, no tracking, no ads.
+      </p>
+      <p>
+        Each game on devdev publishes a single <code>manifest.json</code> at its deploy
+        root. The portal pulls that manifest at build time and renders the catalog,
+        detail pages, and theming entirely from it. Adding a new game is three steps
+        with zero portal-code edits.
+      </p>
+    </div>
+  </ContentSection>
+</BaseLayout>
+
+<style>
+  .prose {
+    max-width: 64ch;
+    color: var(--text-1);
+    font-size: var(--fs-3);
+    line-height: var(--lh-normal);
+  }
+  .prose p + p { margin-top: var(--space-4); }
+  .prose code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--bg-1);
+    padding: 1px 6px;
+    border-radius: var(--radius-1);
+    border: 1px solid var(--border-0);
+  }
+</style>

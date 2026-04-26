@@ -1,0 +1,12 @@
+{
+  "projects": {
+    "default": "bldvolt"
+  },
+  "targets": {
+    "bldvolt": {
+      "hosting": {
+        "devdev": ["devdev-games"]
+      }
+    }
+  }
+}

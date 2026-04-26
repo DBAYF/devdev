@@ -1,0 +1,35 @@
+# build
+dist/
+.astro/
+
+# deps
+node_modules/
+
+# logs / lockfile (lockfile yes; debug no)
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# env
+.env
+.env.*
+!.env.example
+
+# firebase
+.firebase/
+firebase-debug.log
+
+# generated content (manifests fetched at build)
+src/content/games/_generated/
+
+# tests
+coverage/
+playwright-report/
+test-results/

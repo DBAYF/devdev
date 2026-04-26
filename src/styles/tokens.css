@@ -1,0 +1,99 @@
+/* src/styles/tokens.css — design tokens. Single source of truth for color, space,
+   type, radius. Import once via globals.css. Per-game pages override --accent and
+   --bg-game inline. */
+
+:root {
+  /* ─── Color (default / portal-neutral) ─── */
+  --bg-0: #060911;
+  --bg-1: #0c1320;
+  --bg-2: #131c2c;
+  --bg-elev: #1a2438;
+
+  --text-0: #ffffff;
+  --text-1: #c0d0e8;
+  --text-2: #6c7a92;
+  --text-3: #4a566c;
+
+  --accent: #00f0ff;       /* per-game pages override */
+  --accent-soft: #00f0ff26;
+  --accent-magenta: #ff006e;
+
+  --bg-game: #060911;      /* per-game pages override */
+  --bg-game-soft: #060911cc;
+
+  --success: #00ff9d;
+  --warn: #ffb400;
+  --danger: #ff2040;
+
+  --border-0: rgba(255, 255, 255, 0.08);
+  --border-1: rgba(255, 255, 255, 0.16);
+  --border-accent: var(--accent);
+
+  /* ─── Spacing scale (4-px base) ─── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+
+  /* ─── Type ─── */
+  --font-display: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --fs-1: 11px;
+  --fs-2: 13px;
+  --fs-3: 15px;
+  --fs-4: 18px;
+  --fs-5: 22px;
+  --fs-6: 28px;
+  --fs-7: 40px;
+  --fs-8: 64px;
+
+  --lh-tight: 1.15;
+  --lh-snug: 1.35;
+  --lh-normal: 1.55;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.08em;
+  --tracking-wider: 0.16em;
+
+  /* ─── Radius ─── */
+  --radius-1: 2px;
+  --radius-2: 4px;
+  --radius-3: 8px;
+  --radius-4: 12px;
+  --radius-pill: 999px;
+
+  /* ─── Shadow ─── */
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-2: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-3: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 24px var(--accent-soft);
+
+  /* ─── Layout ─── */
+  --content-w: 1280px;
+  --nav-h: 56px;
+
+  /* ─── Motion ─── */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-1: 120ms;
+  --dur-2: 200ms;
+  --dur-3: 320ms;
+  --dur-4: 480ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-1: 0ms;
+    --dur-2: 0ms;
+    --dur-3: 0ms;
+    --dur-4: 0ms;
+  }
+}

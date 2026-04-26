@@ -1,0 +1,37 @@
+---
+// Tag — small label pill. Color tints via variant.
+
+interface Props {
+  variant?: 'neutral' | 'accent' | 'warn' | 'danger' | 'success';
+  size?: 'sm' | 'md';
+}
+
+const { variant = 'neutral', size = 'md' } = Astro.props as Props;
+---
+
+<span class={`tag tag--${variant} tag--${size}`}>
+  <slot />
+</span>
+
+<style>
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    border-radius: var(--radius-pill);
+    border: 1px solid;
+    white-space: nowrap;
+  }
+  .tag--sm { font-size: 9px; padding: 2px 8px; }
+  .tag--md { font-size: var(--fs-1); padding: 3px 10px; }
+
+  .tag--neutral { color: var(--text-1); border-color: var(--border-1); background: var(--bg-1); }
+  .tag--accent  { color: var(--accent);  border-color: var(--accent);  background: var(--accent-soft); }
+  .tag--warn    { color: var(--warn);    border-color: var(--warn);    background: rgba(255, 180, 0, 0.12); }
+  .tag--danger  { color: var(--danger);  border-color: var(--danger);  background: rgba(255, 32, 64, 0.12); }
+  .tag--success { color: var(--success); border-color: var(--success); background: rgba(0, 255, 157, 0.12); }
+</style>

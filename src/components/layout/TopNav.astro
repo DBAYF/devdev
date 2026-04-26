@@ -1,0 +1,81 @@
+---
+import { PRIMARY_NAV } from '@data/nav';
+import Icon from '../primitives/Icon.astro';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => href === '/' ? path === '/' : path.startsWith(href);
+---
+
+<nav class="nav" aria-label="Primary">
+  <div class="nav__inner">
+    <a href="/" class="nav__brand" aria-label="devdev home">
+      <span class="nav__logo">devdev</span>
+    </a>
+    <ul class="nav__list">
+      {PRIMARY_NAV.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class={`nav__link ${isActive(link.href) ? 'nav__link--active' : ''}`}
+            aria-current={isActive(link.href) ? 'page' : undefined}
+          >
+            {link.icon && <Icon name={link.icon} size={14} />}
+            <span>{link.label}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--bg-0) 80%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-0);
+  }
+  .nav__inner {
+    max-width: var(--content-w);
+    margin: 0 auto;
+    height: var(--nav-h);
+    padding: 0 var(--space-4);
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+  .nav__brand { display: flex; align-items: center; }
+  .nav__logo {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: var(--fs-4);
+    letter-spacing: var(--tracking-tight);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-magenta) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .nav__list { display: flex; gap: var(--space-2); }
+  .nav__link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 6px 12px;
+    border-radius: var(--radius-2);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: var(--fs-1);
+    letter-spacing: var(--tracking-wider);
+    color: var(--text-2);
+    transition: color var(--dur-1) var(--ease-out), background-color var(--dur-1) var(--ease-out);
+  }
+  .nav__link:hover { color: var(--text-0); background: var(--bg-1); }
+  .nav__link--active { color: var(--accent); background: var(--accent-soft); }
+  @media (max-width: 600px) {
+    .nav__link span { display: none; }
+    .nav__inner { gap: var(--space-3); }
+  }
+</style>

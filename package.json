@@ -1,0 +1,29 @@
+{
+  "name": "devdev",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "description": "devdev — indie games portal. Steam-like UI, static-first. Houses BLOODVOLT v1.0 ULTIMATE and future titles.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "npm run validate && astro build",
+    "preview": "astro preview",
+    "validate": "tsx scripts/validate-manifests.ts",
+    "fetch:manifests": "tsx scripts/fetch-manifests.ts",
+    "lint": "biome lint src scripts",
+    "format": "biome format --write src scripts",
+    "deploy": "npm run build && firebase deploy --only hosting",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^5.0.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.0",
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}

@@ -1,0 +1,51 @@
+---
+import { FOOTER_NAV } from '@data/nav';
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__brand">devdev <span>· {year}</span></div>
+    <nav aria-label="Footer">
+      <ul>
+        {FOOTER_NAV.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--border-0);
+    background: var(--bg-0);
+    margin-top: var(--space-9);
+  }
+  .footer__inner {
+    max-width: var(--content-w);
+    margin: 0 auto;
+    padding: var(--space-5) var(--space-4);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+  .footer__brand {
+    font-family: var(--font-mono);
+    font-size: var(--fs-1);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--text-2);
+  }
+  .footer__brand span { color: var(--text-3); }
+  .footer ul {
+    display: flex;
+    gap: var(--space-4);
+    font-family: var(--font-mono);
+    font-size: var(--fs-1);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
+  }
+  .footer a { color: var(--text-2); }
+  .footer a:hover { color: var(--accent); }
+</style>
