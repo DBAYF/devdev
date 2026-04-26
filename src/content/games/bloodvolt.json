@@ -50,5 +50,228 @@
     "mobile": true,
     "ageGate": true,
     "freeToPlay": true
-  }
+  },
+  "classShowcase": [
+    {
+      "id": "razor",
+      "name": "RAZOR",
+      "role": "ASSAULT",
+      "weapon": "BONESAW",
+      "color": "#ff2040",
+      "bio": "Ex-corp enforcer. Knows too much. Slow saw, body-slam focus."
+    },
+    {
+      "id": "vipe",
+      "name": "VIPE",
+      "role": "SCOUT",
+      "weapon": "PULSE RIFLE",
+      "color": "#c1ff00",
+      "bio": "Teen anarchist. Pure rate of fire, fragile frame."
+    },
+    {
+      "id": "khaos",
+      "name": "KHAOS",
+      "role": "TANK",
+      "weapon": "FLAK CANNON",
+      "color": "#ff006e",
+      "bio": "Debt slave. Doesn't speak. Massive HP, brutal cones."
+    },
+    {
+      "id": "wraith",
+      "name": "WRAITH",
+      "role": "STEALTH",
+      "weapon": "HOMING MISSILES",
+      "color": "#9d00ff",
+      "bio": "Widow pilot. Hunting names. Cloaked dives, 1.6× crits."
+    },
+    {
+      "id": "magnum",
+      "name": "MAGNUM",
+      "role": "ARTILLERY",
+      "weapon": "HEAVY CANNON",
+      "color": "#ffb400",
+      "bio": "Washed-up merc. Drinks mid-match. Single shells, 4-radius AoE."
+    },
+    {
+      "id": "pulse",
+      "name": "PULSE",
+      "role": "SUPPORT",
+      "weapon": "ARC BEAM",
+      "color": "#00ff9d",
+      "bio": "Black-market medic. Chains 3, lifesteals on hit."
+    }
+  ],
+  "achievements": [
+    {
+      "id": "first_kill",
+      "name": "FIRST BLOOD",
+      "desc": "Get your first kill.",
+      "kind": "kills",
+      "target": 1,
+      "rare": false
+    },
+    {
+      "id": "kills_100",
+      "name": "EXECUTIONER",
+      "desc": "Accumulate 100 kills lifetime.",
+      "kind": "kills",
+      "target": 100,
+      "rare": false
+    },
+    {
+      "id": "kills_500",
+      "name": "GRAVEYARD",
+      "desc": "Accumulate 500 kills lifetime.",
+      "kind": "kills",
+      "target": 500,
+      "rare": false
+    },
+    {
+      "id": "kills_2000",
+      "name": "DEATH FACTORY",
+      "desc": "Accumulate 2,000 kills lifetime.",
+      "kind": "kills",
+      "target": 2000,
+      "rare": true
+    },
+    {
+      "id": "first_win",
+      "name": "FIRST POD",
+      "desc": "Finish your first match.",
+      "kind": "rank",
+      "target": 1,
+      "rare": false
+    },
+    {
+      "id": "match_10",
+      "name": "REGULAR",
+      "desc": "Play 10 matches.",
+      "kind": "rank",
+      "target": 10,
+      "rare": false
+    },
+    {
+      "id": "match_50",
+      "name": "VETERAN",
+      "desc": "Play 50 matches.",
+      "kind": "rank",
+      "target": 50,
+      "rare": false
+    },
+    {
+      "id": "match_200",
+      "name": "LIFER",
+      "desc": "Play 200 matches.",
+      "kind": "rank",
+      "target": 200,
+      "rare": true
+    },
+    {
+      "id": "untouchable",
+      "name": "UNTOUCHABLE",
+      "desc": "Survive 5 minutes without taking damage.",
+      "kind": "survival",
+      "target": 1,
+      "rare": true
+    },
+    {
+      "id": "flawless",
+      "name": "FLAWLESS",
+      "desc": "Win a match without dying.",
+      "kind": "survival",
+      "target": 1,
+      "rare": false
+    },
+    {
+      "id": "clutch",
+      "name": "ONE PERCENT",
+      "desc": "Get a kill at 1 HP.",
+      "kind": "survival",
+      "target": 1,
+      "rare": false
+    },
+    {
+      "id": "savage",
+      "name": "SAVAGE",
+      "desc": "Get 3 kills inside 4 seconds.",
+      "kind": "streak",
+      "target": 3,
+      "rare": false
+    },
+    {
+      "id": "brutal",
+      "name": "BRUTAL",
+      "desc": "Get a 5-kill streak.",
+      "kind": "streak",
+      "target": 5,
+      "rare": false
+    },
+    {
+      "id": "legendary",
+      "name": "LEGENDARY",
+      "desc": "Get an 8-kill streak.",
+      "kind": "streak",
+      "target": 8,
+      "rare": true
+    },
+    {
+      "id": "all_pilots",
+      "name": "WHOLE ROSTER",
+      "desc": "Win at least one match with every chassis.",
+      "kind": "class",
+      "target": 6,
+      "rare": false
+    },
+    {
+      "id": "ult_triple",
+      "name": "ULT CASCADE",
+      "desc": "Get 3 kills with a single ultimate.",
+      "kind": "damage",
+      "target": 1,
+      "rare": true
+    }
+  ],
+  "changelog": [
+    {
+      "version": "1.0-ultimate",
+      "date": "2026-04-26",
+      "summary": "GAME ONE ULTIMATE — sealed launch. Apr-26 balance pass for survivability and felt depth.",
+      "highlights": [
+        "Base HP 120 → 180; regen 14 → 26 HP/s; AI count 6 → 4",
+        "Sharpened L10 class mods across all 24 entries — clearer roles",
+        "Live HUD stats card: CLASS / DPS / MAX HP / SPEED — class-ups now visibly land",
+        "Voicelines suppressed during 3s kill-cam window; weather particles halved",
+        "Validation Part F: 5/5 P1, 5/5 P2, 5/9 P3 closed"
+      ]
+    },
+    {
+      "version": "0.27",
+      "date": "2026-04-26",
+      "summary": "Phase 26: perf audit + voiceline polish + boss-kill cinematic.",
+      "highlights": [
+        "Per-chassis voiceline audio sting (220 Hz square → 1760 Hz sine)",
+        "Boss-down banner + bv-boss-killed event cascade",
+        "Alloc-per-frame estimator wired into perf-monitor"
+      ]
+    },
+    {
+      "version": "0.25",
+      "date": "2026-04-26",
+      "summary": "Pilot voicelines wired (216 lines, 6 chassis × 3 events × adult/clean).",
+      "highlights": [
+        "V4 chrome-ultra prestige material variant for 25 endgame terminals",
+        "Reduced-motion overrides across 12 selectors + killcam lerp"
+      ]
+    },
+    {
+      "version": "0.20",
+      "date": "2026-04-25",
+      "summary": "Mesh decorators saturated at 607 entries; achievements panel + kill-cam shipped.",
+      "highlights": [
+        "Achievements modal with progress bars (16 achievements wired)",
+        "Post-death 3-second kill-cam replay with HP-decay timeline",
+        "Tutorial focus-trap + cross-overlay accessibility sweep"
+      ]
+    }
+  ]
 }

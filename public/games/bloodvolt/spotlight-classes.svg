@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 822" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1920" y2="822" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#080c12"/>
+      <stop offset="1" stop-color="#1a0530"/>
+    </linearGradient>
+    <pattern id="grid" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M80 0H0V80" fill="none" stroke="#ff006e" stroke-width="1" stroke-opacity="0.08"/>
+    </pattern>
+    <radialGradient id="glow" cx="0.7" cy="0.4" r="0.5">
+      <stop offset="0" stop-color="#ff006e" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#ff006e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1920" height="822" fill="url(#bg)"/>
+  <rect width="1920" height="822" fill="url(#grid)"/>
+  <rect width="1920" height="822" fill="url(#glow)"/>
+  <!-- 6 chassis silhouettes in their colors -->
+  <g stroke-width="3" fill="none" opacity="0.85">
+    <polygon points="220,520 280,420 340,520 310,620 250,620" stroke="#ff2040"/>
+    <polygon points="500,510 560,400 620,510 590,610 530,610" stroke="#c1ff00"/>
+    <polygon points="780,520 840,420 900,520 870,620 810,620" stroke="#ff006e"/>
+    <polygon points="1060,510 1120,400 1180,510 1150,610 1090,610" stroke="#9d00ff"/>
+    <polygon points="1340,520 1400,420 1460,520 1430,620 1370,620" stroke="#ffb400"/>
+    <polygon points="1620,510 1680,400 1740,510 1710,610 1650,610" stroke="#00ff9d"/>
+  </g>
+</svg>

@@ -90,6 +90,50 @@ export const gameManifestSchema = z.object({
       until: z.string().datetime(),
     })
     .optional(),
+
+  // Optional showcases — games that don't supply these get a smaller detail page.
+  classShowcase: z
+    .array(
+      z.object({
+        id: z.string().min(1).max(32),
+        name: z.string().min(1).max(32),
+        role: z.string().min(1).max(24),
+        weapon: z.string().min(1).max(48),
+        color: HEX_COLOR,
+        bio: z.string().max(140).optional(),
+      }),
+    )
+    .max(12)
+    .optional(),
+
+  achievements: z
+    .array(
+      z.object({
+        id: z.string().min(1).max(40),
+        name: z.string().min(1).max(40),
+        desc: z.string().min(1).max(140),
+        kind: z
+          .enum(['kills', 'survival', 'damage', 'rank', 'class', 'social', 'streak'])
+          .optional(),
+        target: z.number().int().positive().optional(),
+        rare: z.boolean().default(false),
+      }),
+    )
+    .max(48)
+    .optional(),
+
+  // Live in-game patch list, optional. Most recent first.
+  changelog: z
+    .array(
+      z.object({
+        version: z.string().min(1).max(24),
+        date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+        summary: z.string().min(1).max(240),
+        highlights: z.array(z.string().min(1).max(140)).max(12).default([]),
+      }),
+    )
+    .max(40)
+    .optional(),
 });
 
 export type GameManifest = z.infer<typeof gameManifestSchema>;

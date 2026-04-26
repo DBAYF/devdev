@@ -1,0 +1,120 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@components/layout/BaseLayout.astro';
+import ContentSection from '@components/layout/ContentSection.astro';
+import Tag from '@components/primitives/Tag.astro';
+import Button from '@components/primitives/Button.astro';
+
+const games = await getCollection('games');
+
+const seo = {
+  title: 'Press Kit — devdev',
+  description: 'Press kit, capsule art, and screenshots for devdev games.',
+  canonical: `${Astro.site?.toString() ?? ''}/press`,
+};
+---
+
+<BaseLayout seo={seo}>
+  <ContentSection eyebrow="PRESS" title="PRESS KIT">
+    <p class="lead">
+      Capsule art and screenshots for every devdev game, ready to use in coverage.
+      Logos and brand assets at the bottom. Reach out via the issues feed on each
+      game's repo for review keys.
+    </p>
+  </ContentSection>
+
+  {games.map((g) => (
+    <ContentSection eyebrow={g.data.title} title="ASSETS">
+      <div class="press">
+        <div class="press__head">
+          <Tag variant="accent" size="md">{g.data.rating}</Tag>
+          <Tag variant="neutral" size="md">{g.data.version}</Tag>
+          <Tag variant="neutral" size="md">{g.data.releaseDate}</Tag>
+        </div>
+        <h3 class="press__sub">CAPSULES</h3>
+        <div class="press__grid press__grid--caps">
+          <a href={g.data.capsules.hero}    download class="press__cap"><img src={g.data.capsules.hero}    alt={`${g.data.title} hero capsule`} /><span>HERO 616×353</span></a>
+          <a href={g.data.capsules.catalog} download class="press__cap"><img src={g.data.capsules.catalog} alt={`${g.data.title} catalog capsule`} /><span>CATALOG 460×215</span></a>
+          <a href={g.data.capsules.mini}    download class="press__cap"><img src={g.data.capsules.mini}    alt={`${g.data.title} mini capsule`} /><span>MINI 184×69</span></a>
+        </div>
+        <h3 class="press__sub">SCREENSHOTS</h3>
+        <div class="press__grid press__grid--shots">
+          {g.data.screenshots.map((s, i) => (
+            <a href={s} download class="press__shot"><img src={s} alt={`${g.data.title} screenshot ${i + 1}`} /></a>
+          ))}
+        </div>
+        <div class="press__actions">
+          <Button href={g.data.playUrl} target="_blank" rel="noopener" variant="primary">Open game</Button>
+          <Button href={`/games/${g.data.slug}`} variant="ghost">Game page</Button>
+        </div>
+      </div>
+    </ContentSection>
+  ))}
+
+  <ContentSection eyebrow="DEVDEV" title="BRAND" spacing="md">
+    <div class="brand">
+      <div class="brand__row">
+        <a href="/og-image.svg" download class="brand__btn">OG IMAGE (1200×630 SVG)</a>
+        <a href="/favicon.svg"   download class="brand__btn">FAVICON SVG</a>
+      </div>
+      <div class="brand__pal">
+        <span class="brand__sw" style="background:#00f0ff" title="cyan #00f0ff"></span>
+        <span class="brand__sw" style="background:#ff006e" title="magenta #ff006e"></span>
+        <span class="brand__sw" style="background:#9d00ff" title="violet #9d00ff"></span>
+        <span class="brand__sw" style="background:#080c12" title="bg #080c12"></span>
+        <span class="brand__sw" style="background:#ffffff" title="text #ffffff"></span>
+      </div>
+    </div>
+  </ContentSection>
+</BaseLayout>
+
+<style>
+  .lead { color: var(--text-1); max-width: 64ch; }
+  .press { display: flex; flex-direction: column; gap: var(--space-3); }
+  .press__head { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+  .press__sub {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .press__grid { display: grid; gap: var(--space-3); }
+  .press__grid--caps  { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .press__grid--shots { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+  .press__cap, .press__shot {
+    display: block;
+    border: 1px solid var(--border-0);
+    border-radius: var(--radius-3);
+    overflow: hidden;
+    background: var(--bg-1);
+    transition: border-color var(--dur-1) var(--ease-out);
+  }
+  .press__cap:hover, .press__shot:hover { border-color: var(--accent); }
+  .press__cap img, .press__shot img { width: 100%; display: block; }
+  .press__cap span {
+    display: block;
+    padding: 6px 10px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: var(--tracking-wider);
+    color: var(--text-2);
+    border-top: 1px solid var(--border-0);
+  }
+  .press__actions { display: flex; gap: var(--space-2); margin-top: var(--space-2); }
+
+  .brand { display: flex; flex-direction: column; gap: var(--space-3); }
+  .brand__row { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+  .brand__btn {
+    padding: 8px 14px;
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-2);
+    font-family: var(--font-mono);
+    font-size: var(--fs-1);
+    letter-spacing: var(--tracking-wider);
+    color: var(--text-1);
+  }
+  .brand__btn:hover { border-color: var(--accent); color: var(--accent); }
+  .brand__pal { display: flex; gap: var(--space-2); }
+  .brand__sw { width: 32px; height: 32px; border-radius: var(--radius-2); border: 1px solid var(--border-1); }
+</style>

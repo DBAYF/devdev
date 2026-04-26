@@ -2,39 +2,152 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '@components/layout/BaseLayout.astro';
 import ContentSection from '@components/layout/ContentSection.astro';
-import CapsuleHero from '@components/capsule/CapsuleHero.astro';
 import CapsuleCatalog from '@components/capsule/CapsuleCatalog.astro';
+import HeroCarousel, { type HeroSlide } from '@components/carousel/HeroCarousel.astro';
+import Roadmap from '@components/layout/Roadmap.astro';
+import LiveCounter from '@components/islands/LiveCounter.astro';
+import BackgroundShader from '@components/islands/BackgroundShader.astro';
+import CapsuleTilt from '@components/islands/CapsuleTilt.astro';
+import Tag from '@components/primitives/Tag.astro';
+import Button from '@components/primitives/Button.astro';
 import { homeSeo } from '@lib/seo';
 import { GAMES } from '@data/games-registry';
+import { route } from '@lib/routes';
+import { formatDate } from '@lib/format';
 
 const games = await getCollection('games');
+const news = (await getCollection('news')).sort((a, b) => (a.data.date < b.data.date ? 1 : -1)).slice(0, 3);
 const bySlug = Object.fromEntries(games.map((g) => [g.id, g.data]));
-
 const featuredSlug = GAMES.find((g) => g.featured)?.slug;
 const featured = featuredSlug ? bySlug[featuredSlug] : undefined;
 const all = games.map((g) => g.data);
+
+// Hero spotlights: cycle game · classes · weekly mutator
+const slides: HeroSlide[] = [];
+if (featured) {
+  slides.push({
+    id: 'game',
+    eyebrow: featured.subtitle ?? 'FEATURED',
+    title: featured.title,
+    subline: featured.tagline,
+    ctaLabel: 'OPEN GAME PAGE',
+    ctaHref: route.game(featured.slug),
+    bgUrl: featured.capsules.hero,
+    accentColor: featured.accentColor,
+    darkColor: featured.darkColor,
+  });
+  if ((featured.classShowcase?.length ?? 0) >= 4) {
+    slides.push({
+      id: 'classes',
+      eyebrow: '6 CHASSIS',
+      title: 'PICK YOUR LINEAGE',
+      subline: `${featured.classShowcase!.length} chassis × 4-tier class tree = ${featured.stats.endgamePaths ?? 'deep'} endgame paths.`,
+      ctaLabel: 'EXPLORE CHASSIS',
+      ctaHref: route.game(featured.slug) + '#classes',
+      bgUrl: '/games/bloodvolt/spotlight-classes.svg',
+      accentColor: '#ff006e',
+      darkColor: featured.darkColor,
+    });
+  }
+  if (featured.weeklyEvent || featured.stats.weeklyMutators) {
+    slides.push({
+      id: 'mutator',
+      eyebrow: 'THIS WEEK',
+      title: featured.weeklyEvent?.name ?? 'WEEKLY MUTATORS',
+      subline: featured.weeklyEvent
+        ? 'Active mutator changes how every match plays. Synergize your build.'
+        : `${featured.stats.weeklyMutators} rotating mutators. The arena bends each week.`,
+      ctaLabel: 'OPEN GAME PAGE',
+      ctaHref: route.game(featured.slug),
+      bgUrl: '/games/bloodvolt/spotlight-mutator.svg',
+      accentColor: '#ff2040',
+      darkColor: featured.darkColor,
+    });
+  }
+}
 
 const seo = homeSeo(Astro.site?.toString() ?? 'https://devdev-games.web.app');
 ---
 
 <BaseLayout seo={seo}>
-  {featured && (
-    <ContentSection eyebrow="FEATURED" spacing="md">
-      <CapsuleHero manifest={featured} priority={true} />
+  <BackgroundShader />
+
+  {slides.length > 0 && (
+    <section class="hero-section">
+      <div class="hero-bar">
+        <Tag variant="success" size="sm">DEVDEV</Tag>
+        <LiveCounter label="ACROSS PORTAL" />
+      </div>
+      <HeroCarousel slides={slides} />
+    </section>
+  )}
+
+  <ContentSection title="ALL GAMES" eyebrow={`${all.length} title${all.length === 1 ? '' : 's'}`}>
+    <div class="grid">
+      {all.map((m) => (
+        <CapsuleTilt intensity={6}>
+          <CapsuleCatalog manifest={m} />
+        </CapsuleTilt>
+      ))}
+    </div>
+  </ContentSection>
+
+  {news.length > 0 && (
+    <ContentSection title="LATEST" eyebrow="NEWS">
+      <ul class="news">
+        {news.map((n) => (
+          <li class="news__item">
+            <div class="news__head">
+              <Tag variant="accent" size="sm">{n.data.game}</Tag>
+              <time class="news__date">{formatDate(n.data.date)}</time>
+            </div>
+            <h3 class="news__title">{n.data.title}</h3>
+            <p class="news__sum">{n.data.summary}</p>
+          </li>
+        ))}
+      </ul>
+      <div class="news__more">
+        <Button href={route.news()} variant="ghost" size="sm">ALL NEWS →</Button>
+      </div>
     </ContentSection>
   )}
 
-  <ContentSection title="ALL GAMES" eyebrow={`${all.length} title${all.length === 1 ? '' : 's'}`} spacing="md">
-    <div class="grid">
-      {all.map((m) => <CapsuleCatalog manifest={m} />)}
-    </div>
+  <ContentSection>
+    <Roadmap />
   </ContentSection>
 </BaseLayout>
 
 <style>
+  .hero-section { margin-block: var(--space-5); }
+  .hero-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: var(--space-4);
   }
+  .news {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-3);
+    list-style: none;
+    padding: 0;
+  }
+  .news__item {
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-1);
+    border: 1px solid var(--border-0);
+    border-radius: var(--radius-3);
+    transition: border-color var(--dur-1) var(--ease-out);
+  }
+  .news__item:hover { border-color: var(--accent); }
+  .news__head { display: flex; gap: var(--space-2); align-items: center; margin-bottom: var(--space-2); }
+  .news__date { font-family: var(--font-mono); font-size: 10px; color: var(--text-2); margin-left: auto; letter-spacing: var(--tracking-wide); }
+  .news__title { font-size: var(--fs-3); margin-bottom: 4px; }
+  .news__sum { color: var(--text-1); font-size: var(--fs-2); line-height: var(--lh-snug); }
+  .news__more { margin-top: var(--space-4); text-align: right; }
 </style>

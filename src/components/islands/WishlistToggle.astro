@@ -1,0 +1,66 @@
+---
+// WishlistToggle — star button. Persists to localStorage devdev:wishlist.
+
+interface Props { slug: string; }
+const { slug } = Astro.props as Props;
+---
+
+<button class="wt" data-slug={slug} aria-pressed="false" aria-label="Toggle wishlist">
+  <svg class="wt__star" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3l2.7 6 6.3.6-4.8 4.2 1.5 6.2L12 16.8 6.3 20l1.5-6.2L3 9.6 9.3 9z" />
+  </svg>
+  <span class="wt__label">WISHLIST</span>
+</button>
+
+<style>
+  .wt {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 8px 14px;
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: var(--fs-1);
+    letter-spacing: var(--tracking-wider);
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-2);
+    color: var(--text-1);
+    background: var(--bg-1);
+    cursor: pointer;
+    transition: all var(--dur-1) var(--ease-out);
+  }
+  .wt:hover { border-color: var(--accent); color: var(--accent); }
+  .wt[aria-pressed="true"] {
+    border-color: var(--warn);
+    color: var(--warn);
+    background: rgba(255, 180, 0, 0.1);
+  }
+  .wt[aria-pressed="true"] .wt__star { fill: var(--warn); }
+  .wt[aria-pressed="true"] .wt__label::before { content: 'WISHLISTED'; }
+  .wt[aria-pressed="true"] .wt__label { font-size: 0; }
+  .wt[aria-pressed="true"] .wt__label::before { font-size: var(--fs-1); }
+</style>
+
+<script>
+  const NS = 'devdev:wishlist';
+  function read(): string[] {
+    try { return JSON.parse(localStorage.getItem(NS) ?? '[]') as string[]; } catch { return []; }
+  }
+  function write(list: string[]): void {
+    try { localStorage.setItem(NS, JSON.stringify(list)); } catch {}
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.wt').forEach((btn) => {
+    const slug = btn.dataset.slug ?? '';
+    if (!slug) return;
+    const cur = read();
+    btn.setAttribute('aria-pressed', cur.includes(slug) ? 'true' : 'false');
+    btn.addEventListener('click', () => {
+      const list = read();
+      const idx = list.indexOf(slug);
+      if (idx >= 0) list.splice(idx, 1); else list.push(slug);
+      write(list);
+      btn.setAttribute('aria-pressed', list.includes(slug) ? 'true' : 'false');
+    });
+  });
+</script>

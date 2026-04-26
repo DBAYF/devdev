@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 // devdev — Astro 5 config.
 // Static-first; per-game accent themes via CSS variables; zero JS by default.
@@ -9,6 +10,7 @@ export default defineConfig({
   site: 'https://devdev-games.web.app',
   trailingSlash: 'never',
   output: 'static',
+  integrations: [sitemap({ filter: (page) => !page.includes('/404') })],
   build: {
     format: 'directory',
     inlineStylesheets: 'auto',

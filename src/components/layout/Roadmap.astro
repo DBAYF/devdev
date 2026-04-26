@@ -1,0 +1,86 @@
+---
+// Roadmap card — reusable section on home page or about. Hard-coded entries v1;
+// move to a data file when more games arrive.
+
+interface Item {
+  status: 'live' | 'soon' | 'planned';
+  title: string;
+  desc: string;
+}
+
+const items: Item[] = [
+  { status: 'live',    title: 'BLOODVOLT v1.0 ULTIMATE',    desc: 'Cyberpunk arena combat. 384 endgame paths.' },
+  { status: 'soon',    title: 'Cross-game profile + auth',  desc: 'Anonymous Firebase Auth. One profile across every game.' },
+  { status: 'soon',    title: 'Real screenshot captures',   desc: 'Replace procedural placeholders with live in-game frames.' },
+  { status: 'planned', title: 'Game Two — TBA',             desc: 'Different genre. Same portal. Three-step onboarding.' },
+  { status: 'planned', title: 'Friends + cross-game codes', desc: 'Build codes from any game; portal routes to the right game.' },
+];
+
+const tone = (s: Item['status']) => s === 'live' ? 'success' : s === 'soon' ? 'accent' : 'neutral';
+---
+
+<section class="rm">
+  <header class="rm__head">
+    <div class="rm__eyebrow">ROADMAP</div>
+    <h2 class="rm__title">WHAT'S NEXT</h2>
+  </header>
+  <ul class="rm__list">
+    {items.map((it) => (
+      <li class={`rm__item rm__item--${it.status}`}>
+        <span class={`rm__dot rm__dot--${tone(it.status)}`}></span>
+        <div class="rm__body">
+          <div class="rm__row">
+            <h3 class="rm__name">{it.title}</h3>
+            <span class="rm__badge">{it.status === 'live' ? 'LIVE' : it.status === 'soon' ? 'SOON' : 'PLANNED'}</span>
+          </div>
+          <p class="rm__desc">{it.desc}</p>
+        </div>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .rm__head { margin-bottom: var(--space-4); }
+  .rm__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .rm__title { font-size: var(--fs-5); }
+  .rm__list { display: flex; flex-direction: column; gap: var(--space-2); list-style: none; padding: 0; }
+  .rm__item {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-1);
+    border: 1px solid var(--border-0);
+    border-radius: var(--radius-3);
+  }
+  .rm__dot {
+    flex-shrink: 0;
+    margin-top: 6px;
+    width: 10px; height: 10px; border-radius: 50%;
+    box-shadow: 0 0 8px currentColor;
+  }
+  .rm__dot--success { background: var(--success); color: var(--success); }
+  .rm__dot--accent  { background: var(--accent);  color: var(--accent); }
+  .rm__dot--neutral { background: var(--text-2);  color: var(--text-2); box-shadow: none; }
+  .rm__body { flex: 1; }
+  .rm__row { display: flex; align-items: center; gap: var(--space-3); }
+  .rm__name { font-size: var(--fs-3); }
+  .rm__badge {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: var(--tracking-wider);
+    color: var(--text-2);
+    padding: 2px 8px;
+    border: 1px solid var(--border-1);
+    border-radius: var(--radius-pill);
+  }
+  .rm__desc { color: var(--text-1); font-size: var(--fs-2); margin-top: 2px; }
+</style>

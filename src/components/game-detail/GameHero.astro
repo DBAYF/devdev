@@ -1,9 +1,11 @@
 ---
 import type { GameManifest } from '@content/config';
 import Tag from '../primitives/Tag.astro';
+import HeroTrailer from '../islands/HeroTrailer.astro';
 
 interface Props { manifest: GameManifest; }
 const { manifest } = Astro.props as Props;
+const palette = manifest.classShowcase?.map((c) => c.color) ?? [manifest.accentColor];
 ---
 
 <section class="hero">
@@ -19,7 +21,7 @@ const { manifest } = Astro.props as Props;
       preload="metadata"
     />
   ) : (
-    <img class="hero__bg" src={manifest.capsules.hero} alt="" loading="eager" decoding="async" />
+    <HeroTrailer accent={manifest.accentColor} dark={manifest.darkColor} palette={palette} />
   )}
   <div class="hero__shade" />
   <div class="hero__inner">
@@ -43,7 +45,7 @@ const { manifest } = Astro.props as Props;
     margin-bottom: var(--space-5);
     border: 1px solid var(--border-1);
   }
-  .hero__bg {
+  .hero__bg, .hero :global(.ht) {
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;

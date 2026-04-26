@@ -41,9 +41,9 @@
   --space-9: 96px;
 
   /* ─── Type ─── */
-  --font-display: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-display: 'Inter Variable', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter Variable', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
   --fs-1: 11px;
   --fs-2: 13px;

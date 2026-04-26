@@ -1,0 +1,131 @@
+---
+// FriendCodeBox — paste a build code (e.g. BLDVLT:XXXXXXXX) and we deep-link into
+// the game's playUrl with ?build= and optional &from=. Static-friendly: no fetch.
+
+interface Props {
+  playUrl: string;
+  prefix?: string;
+  placeholder?: string;
+}
+const {
+  playUrl,
+  prefix = 'BLDVLT:',
+  placeholder = 'BLDVLT:XXXXXXXX',
+} = Astro.props as Props;
+---
+
+<form class="fcb" data-play={playUrl} data-prefix={prefix}>
+  <label class="fcb__label">
+    <span class="fcb__head">PLAY A FRIEND'S BUILD</span>
+    <input
+      class="fcb__input"
+      type="text"
+      placeholder={placeholder}
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="characters"
+      spellcheck="false"
+      maxlength="32"
+    />
+  </label>
+  <div class="fcb__actions">
+    <input
+      class="fcb__handle"
+      type="text"
+      placeholder="@your-handle (optional)"
+      autocomplete="off"
+      maxlength="16"
+    />
+    <button class="fcb__btn" type="submit">LAUNCH →</button>
+  </div>
+  <div class="fcb__hint" aria-live="polite"></div>
+</form>
+
+<style>
+  .fcb {
+    padding: var(--space-3) var(--space-4);
+    border: 1px dashed var(--border-1);
+    border-radius: var(--radius-3);
+    background: var(--bg-1);
+  }
+  .fcb__label { display: block; }
+  .fcb__head {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .fcb__input, .fcb__handle {
+    width: 100%;
+    padding: 8px 10px;
+    background: var(--bg-0);
+    color: var(--text-0);
+    border: 1px solid var(--border-0);
+    border-radius: var(--radius-2);
+    font-family: var(--font-mono);
+    font-size: var(--fs-2);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+  }
+  .fcb__input:focus, .fcb__handle:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .fcb__actions {
+    display: flex;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+  }
+  .fcb__handle { flex: 1; text-transform: none; letter-spacing: 0; }
+  .fcb__btn {
+    padding: 8px 14px;
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: var(--fs-1);
+    letter-spacing: var(--tracking-wider);
+    border-radius: var(--radius-2);
+    background: var(--accent);
+    color: var(--bg-0);
+    cursor: pointer;
+  }
+  .fcb__btn:hover { background: color-mix(in srgb, var(--accent) 85%, white); }
+  .fcb__hint {
+    margin-top: 6px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: var(--tracking-wide);
+    color: var(--text-2);
+    min-height: 12px;
+  }
+  .fcb__hint--err { color: var(--danger); }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('.fcb').forEach((form) => {
+    const playUrl = form.dataset.play ?? '';
+    const prefix = form.dataset.prefix ?? '';
+    const input = form.querySelector<HTMLInputElement>('.fcb__input');
+    const handle = form.querySelector<HTMLInputElement>('.fcb__handle');
+    const hint = form.querySelector<HTMLElement>('.fcb__hint');
+    if (!playUrl || !input) return;
+
+    function showHint(msg: string, err = false): void {
+      if (!hint) return;
+      hint.textContent = msg;
+      hint.classList.toggle('fcb__hint--err', err);
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const raw = (input.value || '').trim().toUpperCase();
+      if (!raw) { showHint('paste a build code first', true); return; }
+      const code = raw.startsWith(prefix) ? raw : prefix + raw;
+      const handleVal = (handle?.value || '').trim().replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 16);
+      const url = new URL(playUrl);
+      url.searchParams.set('build', code);
+      if (handleVal) url.searchParams.set('from', handleVal);
+      showHint('opening game...');
+      window.open(url.toString(), '_blank', 'noopener,noreferrer');
+    });
+  });
+</script>

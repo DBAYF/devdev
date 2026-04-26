@@ -10,10 +10,16 @@ import GameAbout from '@components/game-detail/GameAbout.astro';
 import GameStats from '@components/game-detail/GameStats.astro';
 import GameFeatures from '@components/game-detail/GameFeatures.astro';
 import GameWeeklyEvent from '@components/game-detail/GameWeeklyEvent.astro';
+import GameClassShowcase from '@components/game-detail/GameClassShowcase.astro';
+import GameAchievements from '@components/game-detail/GameAchievements.astro';
 import PlayButton from '@components/game-detail/PlayButton.astro';
 import ScreenshotCarousel from '@components/carousel/ScreenshotCarousel.astro';
+import LiveCounter from '@components/islands/LiveCounter.astro';
+import WishlistToggle from '@components/islands/WishlistToggle.astro';
+import FriendCodeBox from '@components/islands/FriendCodeBox.astro';
 import { gameSeo } from '@lib/seo';
 import { gameThemeStyle } from '@lib/theme';
+import { route } from '@lib/routes';
 
 export async function getStaticPaths() {
   const games = await getCollection('games');
@@ -23,6 +29,7 @@ export async function getStaticPaths() {
 const { manifest } = Astro.props;
 const seo = gameSeo(manifest, Astro.site?.toString() ?? 'https://devdev-games.web.app');
 const theme = gameThemeStyle(manifest);
+const hasChangelog = (manifest.changelog?.length ?? 0) > 0;
 ---
 
 <BaseLayout seo={seo} themeStyle={theme} bodyDataGame={manifest.slug}>
@@ -33,15 +40,25 @@ const theme = gameThemeStyle(manifest);
       <ScreenshotCarousel images={manifest.screenshots} alt={manifest.title} />
       <GameAbout manifest={manifest} />
       <GameStats manifest={manifest} />
+      <GameClassShowcase manifest={manifest} />
+      <GameAchievements manifest={manifest} />
     </div>
     <aside class="layout__side">
       <PlayButton manifest={manifest} />
+      <div class="aside-row">
+        <WishlistToggle slug={manifest.slug} />
+        <LiveCounter />
+      </div>
       <GameFeatures manifest={manifest} />
       <GameWeeklyEvent manifest={manifest} />
+      <FriendCodeBox playUrl={manifest.playUrl} />
       <div class="meta">
         <div class="meta__row"><span>VERSION</span><b>{manifest.version}</b></div>
         <div class="meta__row"><span>RELEASED</span><b>{manifest.releaseDate}</b></div>
         <div class="meta__row"><span>RATING</span><b>{manifest.rating}</b></div>
+        {hasChangelog && (
+          <a class="meta__changelog" href={`${route.game(manifest.slug)}/changelog`}>VIEW CHANGELOG →</a>
+        )}
       </div>
     </aside>
   </div>
@@ -54,8 +71,15 @@ const theme = gameThemeStyle(manifest);
     gap: var(--space-5);
     align-items: flex-start;
   }
-  .layout__main { display: flex; flex-direction: column; gap: var(--space-5); min-width: 0; }
-  .layout__side { display: flex; flex-direction: column; gap: var(--space-4); position: sticky; top: calc(var(--nav-h) + var(--space-3)); }
+  .layout__main { display: flex; flex-direction: column; gap: var(--space-6); min-width: 0; }
+  .layout__side { display: flex; flex-direction: column; gap: var(--space-3); position: sticky; top: calc(var(--nav-h) + var(--space-3)); }
+
+  .aside-row {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    align-items: center;
+  }
 
   @media (max-width: 900px) {
     .layout { grid-template-columns: 1fr; }
@@ -80,6 +104,17 @@ const theme = gameThemeStyle(manifest);
     color: var(--text-2);
     border-bottom: 1px dashed var(--border-0);
   }
-  .meta__row:last-child { border-bottom: 0; }
+  .meta__row:last-of-type { border-bottom: 0; }
   .meta__row b { color: var(--text-0); font-weight: 800; }
+  .meta__changelog {
+    display: block;
+    margin-top: var(--space-2);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--border-0);
+    font-family: var(--font-mono);
+    font-size: var(--fs-1);
+    letter-spacing: var(--tracking-wider);
+    color: var(--accent);
+  }
+  .meta__changelog:hover { color: var(--accent); text-decoration: underline; }
 </style>

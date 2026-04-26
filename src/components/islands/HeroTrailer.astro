@@ -1,0 +1,224 @@
+---
+// HeroTrailer — Canvas2D procedural arena loop for game-detail hero backgrounds.
+// Self-contained; takes accent + dark colors and a chassis palette. No mp4 required.
+// Pauses when off-screen (IntersectionObserver) and on reduced-motion.
+
+interface Props {
+  accent: string;
+  dark: string;
+  palette?: string[];
+}
+
+const {
+  accent,
+  dark,
+  palette = ['#ff2040', '#c1ff00', '#ff006e', '#9d00ff', '#ffb400', '#00ff9d'],
+} = Astro.props as Props;
+---
+
+<canvas
+  class="ht"
+  aria-hidden="true"
+  data-accent={accent}
+  data-dark={dark}
+  data-palette={palette.join(',')}
+></canvas>
+
+<style>
+  .ht {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+</style>
+
+<script>
+  const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+
+  document.querySelectorAll<HTMLCanvasElement>('.ht').forEach((canvas) => {
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const accent = canvas.dataset.accent ?? '#00f0ff';
+    const dark = canvas.dataset.dark ?? '#080c12';
+    const palette = (canvas.dataset.palette ?? '').split(',').filter(Boolean);
+    if (palette.length === 0) palette.push(accent);
+
+    let dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    let w = 0;
+    let h = 0;
+
+    function size(): void {
+      const r = canvas.getBoundingClientRect();
+      w = r.width;
+      h = r.height;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx?.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    size();
+    window.addEventListener('resize', size, { passive: true });
+
+    interface Chassis {
+      x: number; y: number; vx: number; vy: number;
+      heading: number; turnRate: number;
+      color: string;
+      scale: number;
+    }
+    const chassis: Chassis[] = [];
+    for (let i = 0; i < 6; i++) {
+      chassis.push({
+        x: Math.random() * w, y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 30,
+        vy: (Math.random() - 0.5) * 30,
+        heading: Math.random() * Math.PI * 2,
+        turnRate: (Math.random() - 0.5) * 0.6,
+        color: palette[i % palette.length] ?? accent,
+        scale: 12 + Math.random() * 6,
+      });
+    }
+
+    interface Particle { x: number; y: number; vx: number; vy: number; life: number; color: string }
+    const particles: Particle[] = [];
+
+    function spawnBurst(x: number, y: number, color: string): void {
+      for (let i = 0; i < 8; i++) {
+        const a = Math.random() * Math.PI * 2;
+        const s = 60 + Math.random() * 80;
+        particles.push({
+          x, y,
+          vx: Math.cos(a) * s, vy: Math.sin(a) * s,
+          life: 1,
+          color,
+        });
+      }
+    }
+
+    let burstTimer = 0;
+    let lastT = performance.now();
+    let running = true;
+
+    function drawChassis(c: Chassis): void {
+      if (!ctx) return;
+      ctx.save();
+      ctx.translate(c.x, c.y);
+      ctx.rotate(c.heading);
+      ctx.strokeStyle = c.color;
+      ctx.fillStyle = c.color + '22';
+      ctx.lineWidth = 2;
+      ctx.shadowColor = c.color;
+      ctx.shadowBlur = 12;
+      ctx.beginPath();
+      ctx.moveTo(c.scale * 1.4, 0);
+      ctx.lineTo(-c.scale * 0.8, c.scale * 0.9);
+      ctx.lineTo(-c.scale * 0.4, 0);
+      ctx.lineTo(-c.scale * 0.8, -c.scale * 0.9);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawGrid(t: number): void {
+      if (!ctx) return;
+      ctx.save();
+      ctx.strokeStyle = accent + '22';
+      ctx.lineWidth = 1;
+      const spacing = 60;
+      const off = (t * 0.02) % spacing;
+      for (let x = -spacing + off; x < w; x += spacing) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+      for (let y = -spacing + off; y < h; y += spacing) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function tick(now: number): void {
+      if (!ctx) return;
+      const dt = Math.min(0.05, (now - lastT) * 0.001);
+      lastT = now;
+
+      // Background
+      const grad = ctx.createLinearGradient(0, 0, w, h);
+      grad.addColorStop(0, dark);
+      grad.addColorStop(1, '#1a0530');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
+
+      drawGrid(now);
+
+      // Update + draw chassis
+      for (const c of chassis) {
+        c.heading += c.turnRate * dt;
+        c.x += c.vx * dt;
+        c.y += c.vy * dt;
+        // Turn velocity toward heading slightly
+        c.vx = c.vx * 0.97 + Math.cos(c.heading) * 8 * dt * 30;
+        c.vy = c.vy * 0.97 + Math.sin(c.heading) * 8 * dt * 30;
+        if (c.x < -40) c.x = w + 40;
+        if (c.x > w + 40) c.x = -40;
+        if (c.y < -40) c.y = h + 40;
+        if (c.y > h + 40) c.y = -40;
+        drawChassis(c);
+      }
+
+      // Bursts every 0.6–1.4s
+      burstTimer -= dt;
+      if (burstTimer <= 0) {
+        const c = chassis[Math.floor(Math.random() * chassis.length)];
+        if (c) spawnBurst(c.x, c.y, c.color);
+        burstTimer = 0.6 + Math.random() * 0.8;
+      }
+
+      // Update + draw particles
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        if (!p) continue;
+        p.life -= dt * 1.6;
+        if (p.life <= 0) { particles.splice(i, 1); continue; }
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.vx *= 0.94;
+        p.vy *= 0.94;
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = Math.max(0, p.life);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+
+      // Top vignette so title above stays readable
+      const vg = ctx.createLinearGradient(0, 0, 0, h);
+      vg.addColorStop(0, 'rgba(6, 9, 17, 0.55)');
+      vg.addColorStop(0.6, 'rgba(6, 9, 17, 0)');
+      vg.addColorStop(1, 'rgba(6, 9, 17, 0.85)');
+      ctx.fillStyle = vg;
+      ctx.fillRect(0, 0, w, h);
+
+      if (running && !reduce) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    // Pause when off-screen
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        const e = entries[0];
+        if (!e) return;
+        if (e.isIntersecting) {
+          if (!running) {
+            running = true;
+            lastT = performance.now();
+            requestAnimationFrame(tick);
+          }
+        } else {
+          running = false;
+        }
+      });
+      io.observe(canvas);
+    }
+  });
+</script>
