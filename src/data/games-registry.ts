@@ -16,4 +16,9 @@ export const GAMES: readonly GameRegistration[] = [
     manifestUrl: 'https://bldvolt.web.app/manifest.json',
     featured: true,
   },
+  {
+    slug: 'labforge-td',
+    manifestUrl: 'https://labforge-td.web.app/manifest.json',
+    featured: false,
+  },
 ] as const;

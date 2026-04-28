@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 616 353" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="616" y2="353" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0c1a14"/>
+      <stop offset="0.5" stop-color="#3a1a14"/>
+      <stop offset="1" stop-color="#080c14"/>
+    </linearGradient>
+    <radialGradient id="dome" cx="0.65" cy="0.7" r="0.42">
+      <stop offset="0" stop-color="#4ade80" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#4ade80" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#4ade80" stroke-width="0.6" stroke-opacity="0.12"/>
+    </pattern>
+  </defs>
+  <rect width="616" height="353" fill="url(#bg)"/>
+  <!-- Mars ground -->
+  <rect y="220" width="616" height="133" fill="#6e2d1c" opacity="0.55"/>
+  <rect width="616" height="353" fill="url(#grid)"/>
+  <rect width="616" height="353" fill="url(#dome)"/>
+  <!-- distant sun -->
+  <circle cx="500" cy="60" r="22" fill="#ffaa66" opacity="0.85"/>
+  <!-- greenhouse dome -->
+  <path d="M380 290 Q450 200 520 290 Z" fill="#4ade80" fill-opacity="0.22" stroke="#4ade80" stroke-width="2"/>
+  <line x1="394" y1="290" x2="394" y2="240" stroke="#4ade80" stroke-width="1.5"/>
+  <line x1="450" y1="290" x2="450" y2="220" stroke="#4ade80" stroke-width="1.5"/>
+  <line x1="506" y1="290" x2="506" y2="240" stroke="#4ade80" stroke-width="1.5"/>
+  <!-- towers in foreground -->
+  <g transform="translate(120 280)">
+    <rect x="-3" y="-32" width="6" height="32" fill="#445566"/>
+    <polygon points="-12,-40 12,-40 9,-30 -9,-30" fill="#fbbf24" stroke="#fbbf24" stroke-width="0.5"/>
+  </g>
+  <g transform="translate(200 280)">
+    <rect x="-4" y="-40" width="8" height="40" fill="#223344"/>
+    <ellipse cx="0" cy="-44" rx="9" ry="5" fill="#06b6d4" opacity="0.92"/>
+  </g>
+  <g transform="translate(300 280)">
+    <rect x="-6" y="-22" width="12" height="22" fill="#2a1a3a"/>
+    <ellipse cx="0" cy="-30" rx="14" ry="6" stroke="#a78bfa" stroke-width="2" fill="none"/>
+    <circle cx="0" cy="-30" r="4" fill="#a78bfa"/>
+  </g>
+  <!-- enemies -->
+  <circle cx="60" cy="170" r="9" fill="#8b6f47" opacity="0.7"/>
+  <polygon points="100,160 112,178 100,196 88,178" fill="#6ee07a" opacity="0.85"/>
+  <polygon points="40,260 50,280 40,300 30,280" fill="#fde047" opacity="0.85"/>
+  <!-- title -->
+  <text x="36" y="86" font-family="-apple-system,'Inter',sans-serif"
+    font-size="56" font-weight="900" fill="#fff" letter-spacing="-1">LabForge</text>
+  <text x="36" y="124" font-family="ui-monospace,'JetBrains Mono',monospace"
+    font-size="18" font-weight="700" fill="#4ade80" letter-spacing="5">·TD · STEM TOWER DEFENCE</text>
+</svg>

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1920" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#060c14"/>
+      <stop offset="0.55" stop-color="#3a1a14"/>
+      <stop offset="1" stop-color="#080c14"/>
+    </linearGradient>
+    <radialGradient id="g2" cx="0.7" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fbbf24" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#fbbf24" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid2" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M80 0H0V80" fill="none" stroke="#fbbf24" stroke-width="1" stroke-opacity="0.08"/>
+    </pattern>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  <rect y="640" width="1920" height="440" fill="#6e2d1c" opacity="0.55"/>
+  <rect width="1920" height="1080" fill="url(#grid2)"/>
+  <rect width="1920" height="1080" fill="url(#g2)"/>
+  <circle cx="1500" cy="180" r="60" fill="#ffaa66" opacity="0.85"/>
+  <!-- greenhouse -->
+  <path d="M1320 880 Q1500 580 1680 880 Z" fill="#4ade80" fill-opacity="0.22" stroke="#4ade80" stroke-width="3"/>
+  <line x1="1370" y1="880" x2="1370" y2="700" stroke="#4ade80" stroke-width="2"/>
+  <line x1="1500" y1="880" x2="1500" y2="640" stroke="#4ade80" stroke-width="2"/>
+  <line x1="1630" y1="880" x2="1630" y2="700" stroke="#4ade80" stroke-width="2"/>
+  <!-- 3 towers -->
+  <g transform="translate(380 880)" stroke="#fbbf24" stroke-width="3" fill="none">
+    <rect x="-8" y="-100" width="16" height="100" fill="#445566" stroke="#445566"/>
+    <polygon points="-32,-120 32,-120 24,-90 -24,-90" fill="#fbbf24"/>
+  </g>
+  <g transform="translate(700 880)" stroke="#06b6d4" stroke-width="3" fill="none">
+    <rect x="-12" y="-130" width="24" height="130" fill="#223344" stroke="#223344"/>
+    <ellipse cx="0" cy="-150" rx="32" ry="14" fill="#06b6d4" opacity="0.9"/>
+  </g>
+  <g transform="translate(1020 880)" stroke="#a78bfa" stroke-width="3" fill="none">
+    <rect x="-18" y="-70" width="36" height="70" fill="#2a1a3a" stroke="#2a1a3a"/>
+    <ellipse cx="0" cy="-100" rx="50" ry="22" stroke="#a78bfa" stroke-width="3"/>
+    <circle cx="0" cy="-100" r="12" fill="#a78bfa"/>
+  </g>
+  <!-- enemies -->
+  <circle cx="200" cy="540" r="32" fill="#8b6f47" opacity="0.7"/>
+  <polygon points="320,510 350,560 320,610 290,560" fill="#6ee07a" opacity="0.85"/>
+  <polygon points="140,720 160,760 140,800 120,760" fill="#fde047" opacity="0.85"/>
+  <text x="100" y="180" font-family="-apple-system,'Inter',sans-serif"
+    font-size="120" font-weight="900" fill="#fff" letter-spacing="-2">ENERGY ECONOMY</text>
+  <text x="100" y="240" font-family="ui-monospace,'JetBrains Mono',monospace"
+    font-size="28" font-weight="700" fill="#fbbf24" letter-spacing="5">SOLAR + STORAGE = STABLE GRID</text>
+  <text x="100" y="1020" font-family="ui-monospace,'JetBrains Mono',monospace"
+    font-size="20" font-weight="700" fill="#6c7a92" letter-spacing="3">LABFORGE TD  ·  v0.1-ALPHA  ·  DEVDEV PORTAL</text>
+</svg>

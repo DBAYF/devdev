@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 215" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="460" y2="215" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0c1a14"/>
+      <stop offset="1" stop-color="#3a1a14"/>
+    </linearGradient>
+    <radialGradient id="dome" cx="0.7" cy="0.65" r="0.5">
+      <stop offset="0" stop-color="#4ade80" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#4ade80" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="460" height="215" fill="url(#bg)"/>
+  <rect y="135" width="460" height="80" fill="#6e2d1c" opacity="0.6"/>
+  <rect width="460" height="215" fill="url(#dome)"/>
+  <circle cx="380" cy="40" r="14" fill="#ffaa66" opacity="0.8"/>
+  <path d="M280 175 Q330 110 380 175 Z" fill="#4ade80" fill-opacity="0.22" stroke="#4ade80" stroke-width="1.6"/>
+  <g transform="translate(80 175)">
+    <rect x="-2" y="-22" width="4" height="22" fill="#445566"/>
+    <polygon points="-8,-28 8,-28 6,-21 -6,-21" fill="#fbbf24"/>
+  </g>
+  <g transform="translate(140 175)">
+    <rect x="-3" y="-28" width="6" height="28" fill="#223344"/>
+    <ellipse cx="0" cy="-32" rx="6" ry="3.5" fill="#06b6d4" opacity="0.9"/>
+  </g>
+  <text x="22" y="68" font-family="-apple-system,'Inter',sans-serif"
+    font-size="38" font-weight="900" fill="#fff" letter-spacing="-1">LabForge<tspan fill="#4ade80" font-size="22"> ·TD</tspan></text>
+  <text x="22" y="92" font-family="ui-monospace,'JetBrains Mono',monospace"
+    font-size="11" font-weight="700" fill="#4ade80" letter-spacing="3">STEM TOWER DEFENCE</text>
+</svg>
