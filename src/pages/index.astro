@@ -3,151 +3,194 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '@components/layout/BaseLayout.astro';
 import ContentSection from '@components/layout/ContentSection.astro';
 import CapsuleCatalog from '@components/capsule/CapsuleCatalog.astro';
-import HeroCarousel, { type HeroSlide } from '@components/carousel/HeroCarousel.astro';
-import Roadmap from '@components/layout/Roadmap.astro';
 import LiveCounter from '@components/islands/LiveCounter.astro';
-import BackgroundShader from '@components/islands/BackgroundShader.astro';
-import CapsuleTilt from '@components/islands/CapsuleTilt.astro';
-import Tag from '@components/primitives/Tag.astro';
-import Button from '@components/primitives/Button.astro';
 import { homeSeo } from '@lib/seo';
 import { GAMES } from '@data/games-registry';
 import { route } from '@lib/routes';
 import { formatDate } from '@lib/format';
 
 const games = await getCollection('games');
-const news = (await getCollection('news')).sort((a, b) => (a.data.date < b.data.date ? 1 : -1)).slice(0, 3);
+const news = (await getCollection('news'))
+  .sort((a, b) => (a.data.date < b.data.date ? 1 : -1))
+  .slice(0, 2);
+
 const bySlug = Object.fromEntries(games.map((g) => [g.id, g.data]));
 const featuredSlug = GAMES.find((g) => g.featured)?.slug;
 const featured = featuredSlug ? bySlug[featuredSlug] : undefined;
 const all = games.map((g) => g.data);
 
-// Hero spotlights: cycle game · classes · weekly mutator
-const slides: HeroSlide[] = [];
-if (featured) {
-  slides.push({
-    id: 'game',
-    eyebrow: featured.subtitle ?? 'FEATURED',
-    title: featured.title,
-    subline: featured.tagline,
-    ctaLabel: 'OPEN GAME PAGE',
-    ctaHref: route.game(featured.slug),
-    bgUrl: featured.capsules.hero,
-    accentColor: featured.accentColor,
-    darkColor: featured.darkColor,
-  });
-  if ((featured.classShowcase?.length ?? 0) >= 4) {
-    slides.push({
-      id: 'classes',
-      eyebrow: '6 CHASSIS',
-      title: 'PICK YOUR LINEAGE',
-      subline: `${featured.classShowcase!.length} chassis × 4-tier class tree = ${featured.stats.endgamePaths ?? 'deep'} endgame paths.`,
-      ctaLabel: 'EXPLORE CHASSIS',
-      ctaHref: route.game(featured.slug) + '#classes',
-      bgUrl: '/games/bloodvolt/spotlight-classes.svg',
-      accentColor: '#ff006e',
-      darkColor: featured.darkColor,
-    });
-  }
-  if (featured.weeklyEvent || featured.stats.weeklyMutators) {
-    slides.push({
-      id: 'mutator',
-      eyebrow: 'THIS WEEK',
-      title: featured.weeklyEvent?.name ?? 'WEEKLY MUTATORS',
-      subline: featured.weeklyEvent
-        ? 'Active mutator changes how every match plays. Synergize your build.'
-        : `${featured.stats.weeklyMutators} rotating mutators. The arena bends each week.`,
-      ctaLabel: 'OPEN GAME PAGE',
-      ctaHref: route.game(featured.slug),
-      bgUrl: '/games/bloodvolt/spotlight-mutator.svg',
-      accentColor: '#ff2040',
-      darkColor: featured.darkColor,
-    });
-  }
-}
-
 const seo = homeSeo(Astro.site?.toString() ?? 'https://devdev-games.web.app');
 ---
 
 <BaseLayout seo={seo}>
-  <BackgroundShader />
-
-  {slides.length > 0 && (
-    <section class="hero-section">
-      <div class="hero-bar">
-        <Tag variant="success" size="sm">DEVDEV</Tag>
-        <LiveCounter label="ACROSS PORTAL" />
+  {featured && (
+    <section
+      class="feat"
+      style={`--feat-accent:${featured.accentColor};--feat-dark:${featured.darkColor};`}
+    >
+      <img class="feat__art" src={featured.capsules.hero} alt="" loading="eager" decoding="async" />
+      <div class="feat__shade" />
+      <div class="feat__content">
+        <div class="feat__eyebrow">{featured.subtitle ?? 'FEATURED'}</div>
+        <h1 class="feat__title">{featured.title}</h1>
+        <p class="feat__tagline">{featured.tagline}</p>
+        <div class="feat__cta">
+          <a
+            class="feat__play"
+            href={featured.playUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Play ${featured.title} (opens in new tab)`}
+          >▸ PLAY NOW</a>
+          <a class="feat__more" href={route.game(featured.slug)}>Details →</a>
+        </div>
       </div>
-      <HeroCarousel slides={slides} />
     </section>
   )}
 
-  <ContentSection title="ALL GAMES" eyebrow={`${all.length} title${all.length === 1 ? '' : 's'}`}>
+  <ContentSection title="GAMES" eyebrow={`${all.length} TITLE${all.length === 1 ? '' : 'S'}`} spacing="md">
     <div class="grid">
-      {all.map((m) => (
-        <CapsuleTilt intensity={6}>
-          <CapsuleCatalog manifest={m} />
-        </CapsuleTilt>
-      ))}
+      {all.map((m) => <CapsuleCatalog manifest={m} />)}
     </div>
   </ContentSection>
 
   {news.length > 0 && (
-    <ContentSection title="LATEST" eyebrow="NEWS">
+    <ContentSection title="UPDATES" spacing="md">
       <ul class="news">
         {news.map((n) => (
           <li class="news__item">
-            <div class="news__head">
-              <Tag variant="accent" size="sm">{n.data.game}</Tag>
-              <time class="news__date">{formatDate(n.data.date)}</time>
-            </div>
-            <h3 class="news__title">{n.data.title}</h3>
-            <p class="news__sum">{n.data.summary}</p>
+            <time class="news__date">{formatDate(n.data.date)}</time>
+            <a class="news__title" href={route.news()}>{n.data.title}</a>
           </li>
         ))}
       </ul>
-      <div class="news__more">
-        <Button href={route.news()} variant="ghost" size="sm">ALL NEWS →</Button>
-      </div>
     </ContentSection>
   )}
 
-  <ContentSection>
-    <Roadmap />
-  </ContentSection>
+  <footer class="meta">
+    <LiveCounter label="ACROSS PORTAL" />
+  </footer>
 </BaseLayout>
 
 <style>
-  .hero-section { margin-block: var(--space-5); }
-  .hero-bar {
+  /* Featured block — single, big, cuts to PLAY in one click. */
+  .feat {
+    position: relative;
+    aspect-ratio: 21 / 9;
+    border-radius: var(--radius-3);
+    overflow: hidden;
+    border: 1px solid var(--border-1);
+    background: var(--feat-dark, var(--bg-1));
+    margin-block: var(--space-5);
+  }
+  .feat__art {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .feat__shade {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 55%),
+      linear-gradient(to right, rgba(0,0,0,0.4) 0%, transparent 55%);
+  }
+  .feat__content {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: var(--space-6);
+    display: flex; flex-direction: column; gap: var(--space-3);
+  }
+  .feat__eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--fs-1);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--feat-accent);
+  }
+  .feat__title {
+    font-size: var(--fs-8);
+    color: #fff;
+    text-shadow: 0 4px 16px rgba(0,0,0,0.7);
+  }
+  .feat__tagline {
+    font-family: var(--font-mono);
+    font-size: var(--fs-2);
+    color: var(--text-1);
+    max-width: 560px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+  }
+  .feat__cta {
     display: flex;
     align-items: center;
-    gap: var(--space-3);
-    margin-bottom: var(--space-3);
+    gap: var(--space-4);
+    margin-top: var(--space-1);
   }
+  .feat__play {
+    padding: 14px 28px;
+    background: var(--feat-accent);
+    color: var(--bg-0);
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: var(--fs-3);
+    letter-spacing: var(--tracking-wider);
+    border-radius: var(--radius-2);
+    box-shadow: 0 8px 32px color-mix(in srgb, var(--feat-accent) 40%, transparent);
+    transition: background var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out);
+  }
+  .feat__play:hover {
+    background: color-mix(in srgb, var(--feat-accent) 86%, white);
+    transform: translateY(-2px);
+  }
+  .feat__more {
+    font-family: var(--font-mono);
+    font-size: var(--fs-2);
+    letter-spacing: var(--tracking-wide);
+    color: var(--text-1);
+  }
+  .feat__more:hover { color: var(--feat-accent); }
+
+  @media (max-width: 768px) {
+    .feat { aspect-ratio: 16 / 11; }
+    .feat__title { font-size: var(--fs-6); }
+    .feat__tagline { font-size: var(--fs-1); }
+    .feat__content { padding: var(--space-4); }
+    .feat__play { padding: 11px 20px; font-size: var(--fs-2); }
+  }
+
+  /* Games grid — minimal, no tilt. */
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: var(--space-4);
   }
-  .news {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: var(--space-3);
-    list-style: none;
-    padding: 0;
-  }
+
+  /* News — tight one-liners. No cards, no eyebrows. */
+  .news { display: flex; flex-direction: column; gap: var(--space-2); }
   .news__item {
-    padding: var(--space-3) var(--space-4);
-    background: var(--bg-1);
-    border: 1px solid var(--border-0);
-    border-radius: var(--radius-3);
-    transition: border-color var(--dur-1) var(--ease-out);
+    display: flex;
+    gap: var(--space-4);
+    padding: var(--space-2) 0;
+    border-bottom: 1px dashed var(--border-0);
+    align-items: baseline;
   }
-  .news__item:hover { border-color: var(--accent); }
-  .news__head { display: flex; gap: var(--space-2); align-items: center; margin-bottom: var(--space-2); }
-  .news__date { font-family: var(--font-mono); font-size: 10px; color: var(--text-2); margin-left: auto; letter-spacing: var(--tracking-wide); }
-  .news__title { font-size: var(--fs-3); margin-bottom: 4px; }
-  .news__sum { color: var(--text-1); font-size: var(--fs-2); line-height: var(--lh-snug); }
-  .news__more { margin-top: var(--space-4); text-align: right; }
+  .news__item:last-child { border-bottom: 0; }
+  .news__date {
+    flex-shrink: 0;
+    width: 96px;
+    font-family: var(--font-mono);
+    font-size: var(--fs-1);
+    letter-spacing: var(--tracking-wide);
+    color: var(--text-2);
+  }
+  .news__title {
+    color: var(--text-0);
+    font-size: var(--fs-3);
+    line-height: var(--lh-snug);
+  }
+  .news__title:hover { color: var(--accent); }
+
+  .meta {
+    display: flex;
+    justify-content: center;
+    margin-block: var(--space-7);
+  }
 </style>

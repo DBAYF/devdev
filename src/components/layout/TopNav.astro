@@ -1,9 +1,16 @@
 ---
+import { getCollection } from 'astro:content';
 import { PRIMARY_NAV } from '@data/nav';
+import { GAMES } from '@data/games-registry';
 import Icon from '../primitives/Icon.astro';
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
-const isActive = (href: string) => href === '/' ? path === '/' : path.startsWith(href);
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+
+// Featured game → persistent PLAY CTA on the right of the nav.
+const games = await getCollection('games');
+const featuredSlug = GAMES.find((g) => g.featured)?.slug;
+const featured = featuredSlug ? games.find((g) => g.id === featuredSlug)?.data : undefined;
 ---
 
 <nav class="nav" aria-label="Primary">
@@ -25,6 +32,17 @@ const isActive = (href: string) => href === '/' ? path === '/' : path.startsWith
         </li>
       ))}
     </ul>
+    {featured && (
+      <a
+        class="nav__play"
+        href={featured.playUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Play ${featured.title} (opens in new tab)`}
+      >
+        ▸ PLAY
+      </a>
+    )}
   </div>
 </nav>
 
@@ -45,7 +63,7 @@ const isActive = (href: string) => href === '/' ? path === '/' : path.startsWith
     padding: 0 var(--space-4);
     display: flex;
     align-items: center;
-    gap: var(--space-6);
+    gap: var(--space-5);
   }
   .nav__brand { display: flex; align-items: center; }
   .nav__logo {
@@ -53,12 +71,9 @@ const isActive = (href: string) => href === '/' ? path === '/' : path.startsWith
     font-weight: 900;
     font-size: var(--fs-4);
     letter-spacing: var(--tracking-tight);
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-magenta) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: var(--accent);
   }
-  .nav__list { display: flex; gap: var(--space-2); }
+  .nav__list { display: flex; gap: var(--space-1); flex: 1; }
   .nav__link {
     display: flex;
     align-items: center;
@@ -74,8 +89,28 @@ const isActive = (href: string) => href === '/' ? path === '/' : path.startsWith
   }
   .nav__link:hover { color: var(--text-0); background: var(--bg-1); }
   .nav__link--active { color: var(--accent); background: var(--accent-soft); }
+
+  /* Persistent PLAY CTA — always visible, always reachable. */
+  .nav__play {
+    padding: 8px 16px;
+    background: var(--accent);
+    color: var(--bg-0);
+    font-family: var(--font-mono);
+    font-weight: 800;
+    font-size: var(--fs-1);
+    letter-spacing: var(--tracking-wider);
+    border-radius: var(--radius-2);
+    transition: background var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out);
+    flex-shrink: 0;
+  }
+  .nav__play:hover {
+    background: color-mix(in srgb, var(--accent) 86%, white);
+    transform: translateY(-1px);
+  }
+
   @media (max-width: 600px) {
     .nav__link span { display: none; }
-    .nav__inner { gap: var(--space-3); }
+    .nav__inner { gap: var(--space-2); }
+    .nav__play { padding: 6px 12px; }
   }
 </style>

@@ -3,15 +3,9 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '@components/layout/BaseLayout.astro';
 import ContentSection from '@components/layout/ContentSection.astro';
 import CapsuleCatalog from '@components/capsule/CapsuleCatalog.astro';
-import CapsuleTilt from '@components/islands/CapsuleTilt.astro';
-import LiveCounter from '@components/islands/LiveCounter.astro';
-import Tag from '@components/primitives/Tag.astro';
 
 const games = await getCollection('games');
 const all = games.map((g) => g.data).sort((a, b) => a.title.localeCompare(b.title));
-
-// Aggregate genre tags for filter chips (no JS state v1; presentational only).
-const allGenres = Array.from(new Set(all.flatMap((g) => g.genre))).sort();
 
 const seo = {
   title: 'Library — devdev',
@@ -21,33 +15,14 @@ const seo = {
 ---
 
 <BaseLayout seo={seo}>
-  <ContentSection title="LIBRARY" eyebrow={`${all.length} title${all.length === 1 ? '' : 's'}`}>
-    <div class="lib__bar">
-      <div class="lib__filters" aria-label="Genre filters (visual only)">
-        {allGenres.map((g) => <Tag variant="neutral">{g}</Tag>)}
-      </div>
-      <LiveCounter label="ACROSS PORTAL" />
-    </div>
+  <ContentSection title="LIBRARY" eyebrow={`${all.length} TITLE${all.length === 1 ? '' : 'S'}`}>
     <div class="grid">
-      {all.map((m) => (
-        <CapsuleTilt intensity={6}>
-          <CapsuleCatalog manifest={m} />
-        </CapsuleTilt>
-      ))}
+      {all.map((m) => <CapsuleCatalog manifest={m} />)}
     </div>
   </ContentSection>
 </BaseLayout>
 
 <style>
-  .lib__bar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    align-items: center;
-    margin-bottom: var(--space-4);
-    justify-content: space-between;
-  }
-  .lib__filters { display: flex; flex-wrap: wrap; gap: var(--space-2); }
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
