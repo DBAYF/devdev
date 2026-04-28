@@ -56,6 +56,9 @@ const hasChangelog = (manifest.changelog?.length ?? 0) > 0;
         <div class="meta__row"><span>VERSION</span><b>{manifest.version}</b></div>
         <div class="meta__row"><span>RELEASED</span><b>{manifest.releaseDate}</b></div>
         <div class="meta__row"><span>RATING</span><b>{manifest.rating}</b></div>
+        {manifest.author && (
+          <div class="meta__row"><span>SIGNED BY</span><b>{manifest.author}</b></div>
+        )}
         {hasChangelog && (
           <a class="meta__changelog" href={`${route.game(manifest.slug)}/changelog`}>VIEW CHANGELOG →</a>
         )}

@@ -91,6 +91,9 @@ export const gameManifestSchema = z.object({
     })
     .optional(),
 
+  // Credit / signature. Shown in the detail-page meta block.
+  author: z.string().min(1).max(48).optional(),
+
   // Optional showcases — games that don't supply these get a smaller detail page.
   classShowcase: z
     .array(
